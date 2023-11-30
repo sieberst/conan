@@ -613,7 +613,10 @@ class UserToolchain(Block):
     def context(self):
         # This is global [conf] injection of extra toolchain files
         user_toolchain = self._conanfile.conf.get("tools.cmake.cmaketoolchain:user_toolchain",
-                                                  default=[], check_type=list)
+                                                  default=[])
+        # Convert the old, experimental syntax (str) to the new syntax (list)
+        if not isinstance(user_toolchain, list):
+            user_toolchain = [user_toolchain]
         return {"paths": [ut.replace("\\", "/") for ut in user_toolchain]}
 
 
